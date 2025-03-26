@@ -1,0 +1,16 @@
+{
+  "name": "crunchys",
+  "version": "1.0.0",
+  "description": "A utility to extract secrets from Crunchyroll mobile app",
+  "main": "crunchys.js",
+  "types": "crunchys.d.ts",
+  "bin": "crunchys-cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vitaly Gashkov <vitalygashkov@vk.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
