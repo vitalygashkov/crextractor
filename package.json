@@ -1,10 +1,11 @@
 {
   "name": "crunchys",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A utility to extract secrets from Crunchyroll mobile app",
   "main": "crunchys.js",
   "types": "crunchys.d.ts",
   "bin": "crunchys-cli.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

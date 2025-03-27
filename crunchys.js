@@ -25,9 +25,7 @@ const downloadLatestApk = async () => {
 const decompileApk = (apkPath) => {
   try {
     execSync(`jadx ${apkPath}`, { stdio: 'inherit' });
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
   return apkPath.replace('.xapk', '');
 };
 
@@ -64,7 +62,7 @@ const parseSecrets = (contents) => {
   return { id, secret, encoded, header };
 };
 
-export const extractSecrets = async ({ cleanup = true } = {}) => {
+const extractSecrets = async ({ cleanup = true } = {}) => {
   console.log('Downloading latest APK...');
   const apkPath = await downloadLatestApk();
 
@@ -74,6 +72,7 @@ export const extractSecrets = async ({ cleanup = true } = {}) => {
   console.log('Searching for secrets...');
   const sourcesDir = join(decompiledDir, 'sources');
   const configurationImpl = await findConfigurationImpl(sourcesDir);
+  if (!configurationImpl) return console.error('Could not find ConfigurationImpl.kt');
 
   console.log('Parsing secrets...');
   const { id, secret, encoded, header } = parseSecrets(configurationImpl);
@@ -88,3 +87,5 @@ export const extractSecrets = async ({ cleanup = true } = {}) => {
 
   return { id, secret, encoded, header };
 };
+
+module.exports = { extractSecrets };

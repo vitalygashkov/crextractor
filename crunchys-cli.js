@@ -1,5 +1,5 @@
-import { extractSecrets } from './crunchys';
+#!/usr/bin/env node
 
-(async () => {
-  await extractSecrets();
-})();
+const { extractSecrets } = require('./crunchys');
+
+extractSecrets();
