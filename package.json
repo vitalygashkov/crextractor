@@ -3,14 +3,31 @@
   "version": "1.0.1",
   "description": "A utility to extract secrets from Crunchyroll mobile app",
   "main": "crunchys.js",
-  "types": "crunchys.d.ts",
   "bin": "crunchys-cli.js",
+  "types": "crunchys.d.ts",
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "crunchyroll"
+  ],
   "author": "Vitaly Gashkov <vitalygashkov@vk.com>",
   "license": "MIT",
+  "readmeFilename": "README.md",
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://boosty.to/vitalygashkov"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/vitalygashkov"
+    }
+  ],
+  "engines": {
+    "node": "20 || 21 || 22 || 23"
+  },
   "devDependencies": {
     "typescript": "^5.8.2"
   }
