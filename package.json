@@ -9,6 +9,7 @@
   "types": "crextractor.d.ts",
   "type": "commonjs",
   "scripts": {
+    "start": "node bin/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
