@@ -31,6 +31,8 @@ const { id, secret, encoded, header } = await extractSecrets();
 npx crextractor
 ```
 
+> Results will be printed to the console and saved to `secrets.json` file
+
 ## License
 
 MIT
