@@ -6,6 +6,11 @@
   "bin": {
     "crextractor": "bin/cli.js"
   },
+  "files": [
+    "bin",
+    "crextractor.d.ts",
+    "crextractor.js"
+  ],
   "types": "crextractor.d.ts",
   "type": "commonjs",
   "scripts": {
