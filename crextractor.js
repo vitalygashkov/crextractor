@@ -11,7 +11,6 @@ const downloadLatestApk = async () => {
   const filepath = join(process.cwd(), 'crunchyroll.xapk');
   await download(url, {
     output: filepath,
-    onProgress: (progress) => console.log(progress),
     onError: (error) => console.error(error),
   });
   return filepath;
