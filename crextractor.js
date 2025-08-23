@@ -1,3 +1,4 @@
+const { execSync } = require('node:child_process');
 const { join } = require('node:path');
 const { readdir, readFile, writeFile, rm } = require('node:fs/promises');
 const { download } = require('molnia');
@@ -65,7 +66,7 @@ const extractSecrets = async ({ output, cleanup = true } = {}) => {
 
   console.log('Searching for secrets...');
   const sourcesDir = join(decompiledDir, 'sources');
-  const manifest = require(join(sourcesDir, 'resources', 'manifest.json'));
+  const manifest = require(join(decompiledDir, 'resources', 'manifest.json'));
   const version = manifest.version_name;
   const configurationImpl = await findConfigurationImpl(sourcesDir);
   if (!configurationImpl) throw new Error('Could not find ConfigurationImpl.kt');
