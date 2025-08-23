@@ -1,7 +1,7 @@
 {
   "name": "crextractor",
   "version": "1.0.1",
-  "description": "A utility to extract secrets from Crunchyroll mobile app",
+  "description": "Utility for extracting secrets from Crunchyroll mobile app",
   "main": "crextractor.js",
   "bin": {
     "crextractor": "bin/cli.js"
