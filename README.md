@@ -1,6 +1,6 @@
-# Crunchys
+# Crextractor
 
-A utility to extract secrets from Crunchyroll mobile app
+Utility for extracting secrets from Crunchyroll mobile app
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ A utility to extract secrets from Crunchyroll mobile app
 ## Installation
 
 ```bash
-npm i crunchys
+npm i crextractor
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ npm i crunchys
 #### Library
 
 ```js
-import { extractSecrets } from 'crunchys';
+import { extractSecrets } from 'crextractor';
 
 const { id, secret, encoded, header } = await extractSecrets();
 
@@ -28,7 +28,7 @@ const { id, secret, encoded, header } = await extractSecrets();
 #### Command-line interface
 
 ```bash
-npx crunchys
+npx crextractor
 ```
 
 ## License

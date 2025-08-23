@@ -1,25 +1,20 @@
-const { join, basename } = require('node:path');
-const { createWriteStream } = require('node:fs');
-const { readdir, readFile, rm } = require('node:fs/promises');
-const { execSync } = require('node:child_process');
-const { Readable } = require('node:stream');
+const { join } = require('node:path');
+const { readdir, readFile, writeFile, rm } = require('node:fs/promises');
+const { download } = require('molnia');
 
 const downloadLatestApk = async () => {
-  const source = 'https://www.apk20.com/apk/com.crunchyroll.crunchyroid/download/';
+  const source = 'https://apkcombo.com/crunchyroll/com.crunchyroll.crunchyroid/download/apk';
   const page = await fetch(source);
   const html = await page.text();
-  const url = html.split('<link rel="canonical" href="')[1]?.split('"')[0];
-  const id = url.split('/').reverse().at(0);
-  const downloadUrl = `https://srv01.apk20.com/com.crunchyroll.crunchyroid.${id}.xapk`;
-  const fileName = basename(downloadUrl);
-  const response = await fetch(downloadUrl);
-  if (response.ok && response.body) {
-    const filePath = join(process.cwd(), fileName);
-    const writer = createWriteStream(filePath);
-    Readable.fromWeb(response.body).pipe(writer);
-    await new Promise((resolve) => writer.on('finish', resolve));
-  }
-  return join(process.cwd(), fileName);
+  const route = '/r2' + html.split('/r2')[1]?.split('"')[0];
+  const url = `https://apkcombo.com${route}`;
+  const filepath = join(process.cwd(), 'crunchyroll.xapk');
+  await download(url, {
+    output: filepath,
+    onProgress: (progress) => console.log(progress),
+    onError: (error) => console.error(error),
+  });
+  return filepath;
 };
 
 const decompileApk = (apkPath) => {
@@ -58,11 +53,11 @@ const parseSecrets = (contents) => {
     .map((line) => line.trim());
   const [, , id, secret] = results;
   const encoded = Buffer.from(`${id}:${secret}`).toString('base64');
-  const header = `Basic ${encoded}`;
-  return { id, secret, encoded, header };
+  const authorization = `Basic ${encoded}`;
+  return { id, secret, encoded, authorization };
 };
 
-const extractSecrets = async ({ cleanup = true } = {}) => {
+const extractSecrets = async ({ output, cleanup = true } = {}) => {
   console.log('Downloading latest APK...');
   const apkPath = await downloadLatestApk();
 
@@ -71,21 +66,29 @@ const extractSecrets = async ({ cleanup = true } = {}) => {
 
   console.log('Searching for secrets...');
   const sourcesDir = join(decompiledDir, 'sources');
+  const manifest = require(join(sourcesDir, 'resources', 'manifest.json'));
+  const version = manifest.version_name;
   const configurationImpl = await findConfigurationImpl(sourcesDir);
-  if (!configurationImpl) return console.error('Could not find ConfigurationImpl.kt');
+  if (!configurationImpl) throw new Error('Could not find ConfigurationImpl.kt');
 
   console.log('Parsing secrets...');
-  const { id, secret, encoded, header } = parseSecrets(configurationImpl);
+  const { id, secret, encoded, authorization } = parseSecrets(configurationImpl);
 
   console.log(`Cleaning up files...`);
   if (cleanup) await rm(apkPath, { recursive: true, force: true });
   if (cleanup) await rm(decompiledDir, { recursive: true, force: true });
 
+  console.log(`Version: ${version}`);
   console.log(`ID: ${id}`);
   console.log(`Secret: ${secret}`);
   console.log(`Encoded ID with secret: ${encoded}`);
+  console.log(`Authorization: ${authorization}`);
 
-  return { id, secret, encoded, header };
+  if (output) {
+    await writeFile(output, JSON.stringify({ version, id, secret, encoded, authorization }, null, 2));
+  }
+
+  return { version, id, secret, encoded, authorization };
 };
 
 module.exports = { extractSecrets };

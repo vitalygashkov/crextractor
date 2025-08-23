@@ -1,10 +1,12 @@
 {
-  "name": "crunchys",
+  "name": "crextractor",
   "version": "1.0.1",
   "description": "A utility to extract secrets from Crunchyroll mobile app",
-  "main": "crunchys.js",
-  "bin": "crunchys-cli.js",
-  "types": "crunchys.d.ts",
+  "main": "crextractor.js",
+  "bin": {
+    "crextractor": "bin/cli.js"
+  },
+  "types": "crextractor.d.ts",
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,17 +20,16 @@
   "funding": [
     {
       "type": "individual",
-      "url": "https://boosty.to/vitalygashkov"
-    },
-    {
-      "type": "patreon",
-      "url": "https://www.patreon.com/vitalygashkov"
+      "url": "https://t.me/tribute/app?startapp=dqW2"
     }
   ],
   "engines": {
-    "node": "20 || 21 || 22 || 23"
+    "node": ">=20"
+  },
+  "dependencies": {
+    "molnia": "^0.1.5"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.2"
   }
 }
