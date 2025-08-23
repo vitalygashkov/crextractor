@@ -2,8 +2,9 @@ const { execSync } = require('node:child_process');
 const { join } = require('node:path');
 const { readdir, readFile, writeFile, rm } = require('node:fs/promises');
 const { download } = require('molnia');
+const { existsSync } = require('node:fs');
 
-const downloadLatestApk = async () => {
+const downloadMobileApk = async () => {
   const source = 'https://apkcombo.com/crunchyroll/com.crunchyroll.crunchyroid/download/apk';
   const page = await fetch(source);
   const html = await page.text();
@@ -17,11 +18,30 @@ const downloadLatestApk = async () => {
   return filepath;
 };
 
+const downloadTvApk = async () => {
+  const source = 'https://webservices.aptoide.com/webservices/3/getApkInfo';
+  const formData = new FormData();
+  formData.append('identif', 'id:71305225');
+  formData.append('mode', 'json');
+  const response = await fetch(source, {
+    method: 'POST',
+    body: formData,
+  });
+  const json = await response.json();
+  const url = json.apk.path;
+  const filepath = join(process.cwd(), 'crunchyroll.apk');
+  await download(url, {
+    output: filepath,
+    onError: (error) => console.error(error),
+  });
+  return filepath;
+};
+
 const decompileApk = (apkPath) => {
   try {
     execSync(`jadx ${apkPath}`, { stdio: 'inherit' });
   } catch (error) {}
-  return apkPath.replace('.xapk', '');
+  return apkPath.replace('.xapk', '').replace('.apk', '');
 };
 
 const findConfigurationImpl = async (sourcesDir) => {
@@ -41,38 +61,59 @@ const findConfigurationImpl = async (sourcesDir) => {
   }
 };
 
-const parseSecrets = (contents) => {
-  const lines = contents.split('\n');
-  const startIndex = lines.findIndex((line) => line.includes('https://sso.crunchyroll.com'));
-  const endIndex = lines.findIndex((line) => line.includes('CR-AndroidMobile-SSAI-Prod'));
-  const results = lines
-    .slice(startIndex, endIndex)
-    .map((line) => line.replaceAll(';', ''))
-    .map((line) => line.replaceAll('"', ''))
-    .map((line) => line.split('= ')[1])
-    .map((line) => line.trim());
-  const [, , id, secret] = results;
-  const encoded = Buffer.from(`${id}:${secret}`).toString('base64');
-  const authorization = `Basic ${encoded}`;
-  return { id, secret, encoded, authorization };
+const parseCredentials = async (decompiledDir) => {
+  const sourcesDir = join(decompiledDir, 'sources');
+  const configurationImpl = await findConfigurationImpl(sourcesDir);
+  if (configurationImpl) {
+    const lines = configurationImpl.split('\n');
+    const startIndex = lines.findIndex((line) => line.includes('https://sso.crunchyroll.com'));
+    const endIndex = lines.findIndex((line) => line.includes('CR-AndroidMobile-SSAI-Prod'));
+    const results = lines
+      .slice(startIndex, endIndex)
+      .map((line) => line.replaceAll(';', ''))
+      .map((line) => line.replaceAll('"', ''))
+      .map((line) => line.split('= ')[1])
+      .map((line) => line.trim());
+    const [, , id, secret] = results;
+    if (id && secret) return { id, secret };
+  }
+
+  const constantsPath = join(decompiledDir, 'sources', 'com', 'crunchyroll', 'api', 'util', 'Constants.java');
+  const constants = await readFile(constantsPath, 'utf8');
+  return {
+    id: constants.split(' PROD_CLIENT_ID = "')[1].split('"')[0],
+    secret: constants.split(' PROD_CLIENT_SECRET = "')[1].split('"')[0],
+  };
 };
 
-const extractSecrets = async ({ output, cleanup = true } = {}) => {
-  console.log('Downloading latest APK...');
-  const apkPath = await downloadLatestApk();
+const parseVersion = async (decompiledDir) => {
+  const manifestJsonPath = join(decompiledDir, 'resources', 'manifest.json');
+  const manifestXmlPath = join(decompiledDir, 'resources', 'AndroidManifest.xml');
+  if (existsSync(manifestJsonPath)) {
+    const manifest = require(manifestJsonPath);
+    const version = `${manifest.version_name} (${manifest.version_code})`;
+    return version;
+  } else if (existsSync(manifestXmlPath)) {
+    const manifest = await readFile(manifestXmlPath, 'utf8');
+    const version = `${manifest.match(/versionName="([^"]+)"/)[1]} (${manifest.match(/versionCode="([^"]+)"/)[1]})`;
+    return version;
+  }
+};
+
+const extract = async ({ target, output, cleanup = false } = {}) => {
+  console.log('Downloading APK...');
+  const apkPath = target === 'tv' ? await downloadTvApk() : await downloadMobileApk();
 
   console.log('Decompiling APK...');
   const decompiledDir = decompileApk(apkPath);
 
-  console.log('Searching for secrets...');
-  const sourcesDir = join(decompiledDir, 'sources');
-  const manifest = require(join(decompiledDir, 'resources', 'manifest.json'));
-  const version = manifest.version_name;
-  const configurationImpl = await findConfigurationImpl(sourcesDir);
-  if (!configurationImpl) throw new Error('Could not find ConfigurationImpl.kt');
+  console.log('Parsing version...');
+  const version = await parseVersion(decompiledDir);
 
-  console.log('Parsing secrets...');
-  const { id, secret, encoded, authorization } = parseSecrets(configurationImpl);
+  console.log('Parsing credentials...');
+  const { id, secret } = await parseCredentials(decompiledDir);
+  const encoded = Buffer.from(`${id}:${secret}`).toString('base64');
+  const authorization = `Basic ${encoded}`;
 
   console.log(`Cleaning up files...`);
   if (cleanup) await rm(apkPath, { recursive: true, force: true });
@@ -91,4 +132,4 @@ const extractSecrets = async ({ output, cleanup = true } = {}) => {
   return { version, id, secret, encoded, authorization };
 };
 
-module.exports = { extractSecrets };
+module.exports = { extract };
