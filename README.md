@@ -20,7 +20,7 @@ npm i crextractor
 ```js
 import { extractSecrets } from 'crextractor';
 
-const { id, secret, encoded, header } = await extractSecrets();
+const { id, secret, encoded, authorization } = await extractSecrets();
 
 // Do something with the extracted secrets
 ```
