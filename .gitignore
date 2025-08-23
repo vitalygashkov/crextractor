@@ -1,2 +1,5 @@
 /node_modules
 .DS_Store
+/crunchyroll
+crunchyroll.apk
+crunchyroll.xapk
