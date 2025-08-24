@@ -15,7 +15,6 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm run build
 
       # Extract version from package.json and determine release channel
       - name: Parse version and determine release channel
