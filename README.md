@@ -7,12 +7,6 @@ Utility for extracting credentials from the Crunchyroll Android app
 - [Node.js](https://nodejs.org/en)
 - [jadx](https://github.com/skylot/jadx)
 
-## Installation
-
-```bash
-npm i crextractor
-```
-
 ## Usage
 
 ### Fetching already extracted credentials
@@ -46,6 +40,10 @@ npx crextractor --target mobile --output ./credentials.mobile.json
 > Results will be printed to the console and saved to `credentials.mobile.json` file. By default, the target is TV, but you can change it with `--target mobile` option.
 
 ### Library
+
+```bash
+npm i crextractor
+```
 
 ```js
 import { extract } from 'crextractor';
