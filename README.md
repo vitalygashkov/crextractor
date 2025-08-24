@@ -37,7 +37,7 @@ async function main() {
 }
 ```
 
-#### Command-line interface
+### Command-line interface
 
 ```bash
 npx crextractor --target mobile --output ./credentials.mobile.json
@@ -45,7 +45,7 @@ npx crextractor --target mobile --output ./credentials.mobile.json
 
 > Results will be printed to the console and saved to `credentials.mobile.json` file. By default, the target is TV, but you can change it with `--target mobile` option.
 
-#### Library
+### Library
 
 ```js
 import { extract } from 'crextractor';
