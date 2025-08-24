@@ -15,17 +15,17 @@ npm i crextractor
 
 ## Usage
 
-### Fetching already extracted secrets
+### Fetching already extracted credentials
 
 ```js
 async function main() {
   const url = 'https://raw.githubusercontent.com/vitalygashkov/crextractor/refs/heads/main/credentials.tv.json';
-  const data = await fetch(url).then((response) => response.json());
+  const credentials = await fetch(url).then((response) => response.json());
 
-  // You can use the extracted secrets to obtain access tokens for Crunchyroll APIs
+  // You can use the extracted credentials to obtain access tokens for Crunchyroll APIs
   const response = await fetch('https://beta-api.crunchyroll.com/auth/v1/token', {
     headers: {
-      Authorization: data.authorization,
+      Authorization: credentials.authorization,
       'User-Agent': 'Crunchyroll/ANDROIDTV/3.42.1_22267 (Android 16; en-US; sdk_gphone64_x86_64)',
       // ...
     },
@@ -43,8 +43,12 @@ async function main() {
 import { extract } from 'crextractor';
 
 const { id, secret, encoded, authorization } = await extract();
+// id - Crunchyroll app ID
+// secret - Crunchyroll app secret
+// encoded - Base64 encoded `id:secret` string
+// authorization - ready HTTP header in the format `Basic <encoded>`, can be used to access some Crunchyroll APIs
 
-// Do something with the extracted secrets
+// Do something with the extracted credentials
 ```
 
 #### Command-line interface
