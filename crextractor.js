@@ -1,16 +1,12 @@
 const { execSync } = require('node:child_process');
 const { join } = require('node:path');
 const { readdir, readFile, writeFile, rm } = require('node:fs/promises');
-const { download } = require('molnia');
 const { existsSync } = require('node:fs');
+const { download } = require('molnia');
 
 const downloadMobileApk = async () => {
-  const source = 'https://apkcombo.com/crunchyroll/com.crunchyroll.crunchyroid/download/apk';
-  const page = await fetch(source);
-  const html = await page.text();
-  const route = '/r2' + html.split('/r2')[1]?.split('"')[0];
-  const url = `https://apkcombo.com${route}`;
-  const filepath = join(process.cwd(), 'crunchyroll.xapk');
+  const url = 'https://api.qqaoop.com/v11/apps/com.crunchyroll.crunchyroid/download?userId=1';
+  const filepath = join(process.cwd(), 'crunchyroll.apk');
   await download(url, {
     output: filepath,
     onError: (error) => console.error(error),
