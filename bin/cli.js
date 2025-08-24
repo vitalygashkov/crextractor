@@ -14,7 +14,7 @@ const args = parseArgs({
     },
     cleanup: {
       type: 'boolean',
-      default: false,
+      default: true,
     },
   },
 });
