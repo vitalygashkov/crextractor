@@ -1,0 +1,53 @@
+name: Extract
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * 1' # Runs every Monday at 04:00 UTC
+
+jobs:
+  decompile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # JADX requires Java 11 or higher to run
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Download and install the latest version of JADX
+      - name: Install JADX
+        run: |
+          # Fetch the latest version tag from the JADX GitHub repository
+          JADX_VERSION=$(curl -s "https://api.github.com/repos/skylot/jadx/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
+          echo "Installing JADX version ${JADX_VERSION}..."
+
+          # Download the release zip file
+          curl -Lo jadx.zip "https://github.com/skylot/jadx/releases/download/v${JADX_VERSION}/jadx-${JADX_VERSION}.zip"
+
+          # Unzip the archive
+          unzip -q jadx.zip -d jadx-dist
+
+          # Add the JADX bin directory to the GitHub Actions path
+          # This makes the 'jadx' command available in subsequent steps
+          echo "$(pwd)/jadx-dist/jadx-${JADX_VERSION}/bin" >> $GITHUB_PATH
+
+          # Clean up the downloaded zip file
+          rm jadx.zip
+        shell: bash
+
+      # Verify that JADX was installed correctly
+      - name: Verify JADX installation
+        run: jadx --version
+
+      # Verify that JADX was installed correctly
+      - name: Extract app credentials
+        run: node . --target mobile --output ./credentials.mobile.json && node . --target tv --output ./credentials.tv.json
+
+      # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v5
