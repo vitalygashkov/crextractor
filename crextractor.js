@@ -96,7 +96,7 @@ const parseVersion = async (decompiledDir) => {
   }
 };
 
-const extract = async ({ target, output, cleanup = false } = {}) => {
+const extract = async ({ target = 'mobile', output, cleanup = false } = {}) => {
   console.log('Downloading APK...');
   const apkPath = target === 'tv' ? await downloadTvApk() : await downloadMobileApk();
 
@@ -128,4 +128,10 @@ const extract = async ({ target, output, cleanup = false } = {}) => {
   return { version, id, secret, encoded, authorization };
 };
 
-module.exports = { extract };
+const pull = async ({ target = 'mobile' } = {}) => {
+  const url = `https://raw.githubusercontent.com/vitalygashkov/crextractor/refs/heads/main/credentials.${target}.json`;
+  const credentials = await fetch(url).then((response) => response.json());
+  return credentials;
+};
+
+module.exports = { extract, pull };
