@@ -3,7 +3,7 @@ name: Extract
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * 6' # Runs every Monday at 04:00 UTC
+    - cron: '0 6 * * 6' # Runs every Saturday at 06:00 UTC
 
 jobs:
   extract:
