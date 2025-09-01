@@ -44,7 +44,6 @@ jobs:
 
           # Clean up the downloaded zip file
           rm jadx.zip
-        shell: bash
 
       # Verify that JADX was installed correctly
       - name: Verify JADX installation
