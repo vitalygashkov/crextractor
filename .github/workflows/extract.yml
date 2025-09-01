@@ -41,6 +41,7 @@ jobs:
           # Add the JADX bin directory to the GitHub Actions path
           # This makes the 'jadx' command available in subsequent steps
           echo "$(pwd)/jadx-dist/jadx-${JADX_VERSION}/bin" >> $GITHUB_PATH
+          export PATH="$(pwd)/jadx-dist/jadx-${JADX_VERSION}/bin:$PATH"
 
           # Clean up the downloaded zip file
           rm jadx.zip
