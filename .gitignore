@@ -1,6 +1,7 @@
 /node_modules
 .DS_Store
 /jadx-dist
+/jadx.zip
 /crunchyroll
 crunchyroll.apk
 crunchyroll.xapk

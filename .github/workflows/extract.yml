@@ -42,13 +42,18 @@ jobs:
           # This makes the 'jadx' command available in subsequent steps
           echo "$(pwd)/jadx-dist/bin" >> $GITHUB_PATH
 
+          # Clean up the downloaded zip file
+          rm jadx.zip
+
       # Verify that JADX was installed correctly
       - name: Verify JADX installation
         run: jadx --version
 
       # Verify that JADX was installed correctly
       - name: Extract app credentials
-        run: node . --target mobile --output ./credentials.mobile.json && node . --target tv --output ./credentials.tv.json
+        run: |
+          npm install
+          node . --target mobile --output ./credentials.mobile.json && node . --target tv --output ./credentials.tv.json
 
       # Commit all changed files back to the repository
       - uses: stefanzweifel/git-auto-commit-action@v5
