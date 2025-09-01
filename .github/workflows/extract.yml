@@ -42,6 +42,6 @@ jobs:
         run: npm install
 
       - name: Extract app credentials
-        run: node . --target mobile --output ./credentials.mobile.json && node . --target tv --output ./credentials.tv.json
+        run: npm run extract:mobile && npm run extract:tv
 
       - uses: stefanzweifel/git-auto-commit-action@v5
