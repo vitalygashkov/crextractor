@@ -38,14 +38,16 @@ jobs:
           # Unzip the archive
           unzip -q jadx.zip -d jadx-dist
 
-          echo $PATH && ls $(pwd)/jadx-dist/
+          # Debug
+          echo "PATH is: $PATH"
+          ls -l $(pwd)/jadx-dist/
+          ls -l $(pwd)/jadx-dist/*/bin
+          $(pwd)/jadx-dist/jadx-*/bin/jadx --version
+          chmod +x $(pwd)/jadx-dist/jadx-${JADX_VERSION}/bin/jadx
 
           # Add the JADX bin directory to the GitHub Actions path
           # This makes the 'jadx' command available in subsequent steps
           echo "$(pwd)/jadx-dist/jadx-${JADX_VERSION}/bin" >> $GITHUB_PATH
-
-          # Clean up the downloaded zip file
-          rm jadx.zip
 
       # Verify that JADX was installed correctly
       - name: Verify JADX installation
