@@ -17,7 +17,7 @@ const downloadMobileApk = async () => {
 const downloadTvApk = async () => {
   const source = 'https://webservices.aptoide.com/webservices/3/getApkInfo';
   const formData = new FormData();
-  formData.append('identif', 'id:71305225');
+  formData.append('identif', 'id:71666229');
   formData.append('mode', 'json');
   const response = await fetch(source, {
     method: 'POST',
