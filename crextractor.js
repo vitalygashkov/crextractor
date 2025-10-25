@@ -100,7 +100,7 @@ const extract = async ({ target = 'mobile', output, cleanup = false } = {}) => {
   console.log('Downloading APK...');
   const apkPath = target === 'tv' ? await downloadTvApk() : await downloadMobileApk();
 
-  if (existsSync(apkPath)) {
+  if (!existsSync(apkPath)) {
     console.error('Unable to find APK (possibly a download error)');
     return;
   }
