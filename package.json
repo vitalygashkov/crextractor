@@ -35,7 +35,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "molnia": "^0.1.5"
+    "molnia": "^0.1.7"
   },
   "devDependencies": {
     "typescript": "^5.9.2"
