@@ -32,12 +32,13 @@
     }
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "molnia": "^0.1.7"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "oxfmt": "^0.28.0",
+    "typescript": "^5.9.3"
   }
 }
