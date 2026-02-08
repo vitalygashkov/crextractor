@@ -15,9 +15,21 @@ const downloadMobileApk = async () => {
 };
 
 const downloadTvApk = async () => {
+  const searchParams = new URLSearchParams();
+  searchParams.append('query', 'crunchyroll');
+  searchParams.append('cdn', 'web');
+  searchParams.append('q', 'bXlDUFU9YXJtNjQtdjhhLGFybWVhYmktdjdhLGFybWVhYmkmbGVhbmJhY2s9MA');
+  searchParams.append('aab', '1');
+  const searchUrl = `https://ws2-cache.aptoide.com/api/7/apps/search?${searchParams.toString()}`;
+  const searchResults = await fetch(searchUrl).then((r) => r.json());
+  const id = searchResults.datalist?.list?.[0]?.id;
+  if (!id) {
+    console.error('Unable to find ID for TV APK');
+    return;
+  }
   const source = 'https://webservices.aptoide.com/webservices/3/getApkInfo';
   const body = new FormData();
-  body.append('identif', 'id:72863127');
+  body.append('identif', `id:${id}`);
   body.append('mode', 'json');
   const response = await fetch(source, { method: 'POST', body });
   const json = await response.json();
@@ -71,7 +83,15 @@ const parseCredentials = async (decompiledDir) => {
     if (id && secret) return { id, secret };
   }
 
-  const constantsPath = join(decompiledDir, 'sources', 'com', 'crunchyroll', 'api', 'util', 'Constants.java');
+  const constantsPath = join(
+    decompiledDir,
+    'sources',
+    'com',
+    'crunchyroll',
+    'api',
+    'util',
+    'Constants.java',
+  );
   const constants = await readFile(constantsPath, 'utf8');
   return {
     id: constants.split(' PROD_CLIENT_ID = "')[1].split('"')[0],
@@ -124,7 +144,10 @@ const extract = async ({ target = 'mobile', output, cleanup = false } = {}) => {
   console.log(`Authorization: ${authorization}`);
 
   if (output) {
-    await writeFile(output, JSON.stringify({ version, id, secret, encoded, authorization }, null, 2));
+    await writeFile(
+      output,
+      JSON.stringify({ version, id, secret, encoded, authorization }, null, 2),
+    );
   }
 
   return { version, id, secret, encoded, authorization };
