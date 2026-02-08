@@ -19,9 +19,10 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
+      - run: npm install -g npm@latest
       - run: npm ci
+      - run: npm run build --if-present
 
-      # Extract version from package.json and determine release channel
       - name: Parse version and determine release channel
         id: version
         run: |
@@ -38,12 +39,10 @@ jobs:
             echo "NPM_TAG=latest" >> $GITHUB_OUTPUT
           fi
 
-      # Publish with the appropriate tag
-      - name: Publish to npm
+      - name: Publish new version
         run: npm publish --tag ${{ steps.version.outputs.NPM_TAG }}
 
-      # Only create GitHub releases for stable versions
-      - name: Create GitHub Release
+      - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
