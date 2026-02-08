@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   publish:
@@ -36,8 +36,6 @@ jobs:
       # Publish with the appropriate tag
       - name: Publish to npm
         run: npm publish --tag ${{ steps.version.outputs.NPM_TAG }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Only create GitHub releases for stable versions
       - name: Create GitHub Release
