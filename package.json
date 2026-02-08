@@ -6,14 +6,14 @@
     "crunchyroll"
   ],
   "bugs": {
-    "url": "https://github.com/vitalygashkov/barsic/issues",
+    "url": "https://github.com/vitalygashkov/crextractor/issues",
     "email": "vitalygashkov@vk.com"
   },
   "license": "MIT",
   "author": "Vitaly Gashkov <vitalygashkov@vk.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitalygashkov/barsic.git"
+    "url": "git+https://github.com/vitalygashkov/crextractor.git"
   },
   "funding": [
     {
