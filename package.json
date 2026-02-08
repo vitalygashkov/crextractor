@@ -5,8 +5,16 @@
   "keywords": [
     "crunchyroll"
   ],
+  "bugs": {
+    "url": "https://github.com/vitalygashkov/barsic/issues",
+    "email": "vitalygashkov@vk.com"
+  },
   "license": "MIT",
   "author": "Vitaly Gashkov <vitalygashkov@vk.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitalygashkov/barsic.git"
+  },
   "funding": [
     {
       "type": "individual",
