@@ -6,12 +6,16 @@ on:
     tags:
       - "v*"
 
+permissions:
+  id-token: write
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
@@ -45,6 +49,3 @@ jobs:
           generate_release_notes: true
           prerelease: ${{ steps.version.outputs.PRERELEASE == 'true' }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-permissions:
-  contents: write

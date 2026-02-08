@@ -2,7 +2,17 @@
   "name": "crextractor",
   "version": "1.3.5",
   "description": "Utility for extracting credentials from the Crunchyroll Android app",
-  "main": "crextractor.js",
+  "keywords": [
+    "crunchyroll"
+  ],
+  "license": "MIT",
+  "author": "Vitaly Gashkov <vitalygashkov@vk.com>",
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://t.me/tribute/app?startapp=dqW2"
+    }
+  ],
   "bin": {
     "crextractor": "bin/cli.js"
   },
@@ -11,28 +21,14 @@
     "crextractor.d.ts",
     "crextractor.js"
   ],
-  "types": "crextractor.d.ts",
   "type": "commonjs",
+  "main": "crextractor.js",
+  "types": "crextractor.d.ts",
   "scripts": {
     "start": "node bin/cli.js",
     "extract:mobile": "node bin/cli.js --target mobile --output ./credentials.mobile.json",
     "extract:tv": "node bin/cli.js --target tv --output ./credentials.tv.json",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "crunchyroll"
-  ],
-  "author": "Vitaly Gashkov <vitalygashkov@vk.com>",
-  "license": "MIT",
-  "readmeFilename": "README.md",
-  "funding": [
-    {
-      "type": "individual",
-      "url": "https://t.me/tribute/app?startapp=dqW2"
-    }
-  ],
-  "engines": {
-    "node": ">=22"
   },
   "dependencies": {
     "molnia": "^0.1.7"
@@ -40,5 +36,9 @@
   "devDependencies": {
     "oxfmt": "^0.28.0",
     "typescript": "^5.9.3"
-  }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "readmeFilename": "README.md"
 }
