@@ -28,6 +28,7 @@ jobs:
           echo "Installing JADX version ${JADX_VERSION}..."
           curl -Lo jadx.zip "https://github.com/skylot/jadx/releases/download/v${JADX_VERSION}/jadx-${JADX_VERSION}.zip"
           unzip -q jadx.zip -d jadx-dist
+          chmod +x jadx-dist/bin/jadx
           echo "$(pwd)/jadx-dist/bin" >> $GITHUB_PATH
           rm jadx.zip
 
