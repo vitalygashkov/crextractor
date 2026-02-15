@@ -1,6 +1,6 @@
 {
   "name": "crextractor",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "description": "Utility for extracting credentials from the Crunchyroll Android app",
   "keywords": [
     "crunchyroll"
