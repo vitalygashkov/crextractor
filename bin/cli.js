@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const { parseArgs } = require('node:util');
-const { extract } = require('../crextractor');
+import { parseArgs } from 'node:util';
+import { extract } from '../crextractor.js';
 
 const args = parseArgs({
   options: {

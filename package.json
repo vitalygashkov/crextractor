@@ -29,9 +29,16 @@
     "crextractor.d.ts",
     "crextractor.js"
   ],
-  "type": "commonjs",
+  "type": "module",
   "main": "crextractor.js",
   "types": "crextractor.d.ts",
+  "exports": {
+    ".": {
+      "types": "./crextractor.d.ts",
+      "import": "./crextractor.js",
+      "require": "./crextractor.js"
+    }
+  },
   "scripts": {
     "start": "node bin/cli.js",
     "extract:mobile": "node bin/cli.js --target mobile --output ./credentials.mobile.json",
@@ -46,7 +53,7 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "readmeFilename": "README.md"
 }

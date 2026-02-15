@@ -1,8 +1,8 @@
-const { execSync } = require('node:child_process');
-const { join } = require('node:path');
-const { readdir, readFile, writeFile, rm } = require('node:fs/promises');
-const { existsSync } = require('node:fs');
-const { download } = require('molnia');
+import { execSync } from 'node:child_process';
+import { join } from 'node:path';
+import { readdir, readFile, writeFile, rm } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { download } from 'molnia';
 
 const downloadMobileApk = async () => {
   const url = 'https://api.qqaoop.com/v11/apps/com.crunchyroll.crunchyroid/download?userId=1';
@@ -103,7 +103,8 @@ const parseVersion = async (decompiledDir) => {
   const manifestJsonPath = join(decompiledDir, 'resources', 'manifest.json');
   const manifestXmlPath = join(decompiledDir, 'resources', 'AndroidManifest.xml');
   if (existsSync(manifestJsonPath)) {
-    const manifest = require(manifestJsonPath);
+    const manifestContent = await readFile(manifestJsonPath, 'utf8');
+    const manifest = JSON.parse(manifestContent);
     const version = `${manifest.version_name} (${manifest.version_code})`;
     return version;
   } else if (existsSync(manifestXmlPath)) {
@@ -159,4 +160,4 @@ const pull = async ({ target = 'mobile' } = {}) => {
   return credentials;
 };
 
-module.exports = { extract, pull };
+export { extract, pull };
