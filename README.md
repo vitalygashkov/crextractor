@@ -2,7 +2,7 @@
 
 Utility for extracting credentials from the Crunchyroll Android app (both TV and mobile versions).
 
-The [credentials](https://github.com/vitalygashkov/crextractor/blob/main/credentials.tv.json) are [automatically](https://github.com/vitalygashkov/crextractor/actions/workflows/extract.yml) updated once a week (if there are any changes).
+The [credentials](https://github.com/vitalygashkov/crextractor/blob/main/credentials.tv.json) are [automatically](https://github.com/vitalygashkov/crextractor/actions/workflows/extract.yml) updated once a month (if there are any changes).
 
 ## Usage
 

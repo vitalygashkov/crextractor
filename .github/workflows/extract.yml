@@ -3,7 +3,7 @@ name: Extract
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * 6' # Runs every Saturday at 06:00 UTC
+    - cron: '0 6 1 * *' # Runs monthly on the 1st day at 06:00 UTC
 
 jobs:
   extract:
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: 'package.json'
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
